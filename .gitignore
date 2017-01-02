@@ -44,6 +44,7 @@ nosetests.xml
 coverage.xml
 *,cover
 .hypothesis/
+debug.txt
 
 # Translations
 *.mo
@@ -87,3 +88,7 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# PyCharm stuff
+.idea/
+
