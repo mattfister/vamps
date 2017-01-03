@@ -8,6 +8,7 @@ from freezegame.image_loader import ImageLoader
 from freezegame.abstract_state import AbstractState
 from freezegame.sprite import Sprite
 from freezegame.tile_map import TileMap
+from freezegame.broad_phase_collision import RDC
 from vamps.player import Player
 
 pyglet.resource.path = ["./graphics"]
@@ -56,6 +57,7 @@ fps = pyglet.clock.ClockDisplay()
 
 level = AbstractState()
 
+
 class SampleScene(AbstractState):
     def __init__(self):
         AbstractState.__init__(self)
@@ -78,7 +80,7 @@ class SampleScene(AbstractState):
 
         self.camera = [0, 0]
 
-        self.player = Player(5*32, 5*32, self)
+        self.player = Player(64, 64, self)
         self.sprites.append(self.player)
 
     def draw(self):
@@ -105,18 +107,24 @@ class SampleScene(AbstractState):
             if sprite.updatable:
                 sprite.resolve_tile_map_collisions(self.map)
 
-        # TODO figure out broad phase collision again
+        # Broad phase collision
+        rdc = RDC()
+        rdc.recursive_clustering(self.sprites, 0, 1)
+        groups = rdc.colliding_groups
 
         # Now do narrow phase collision
-        for sprite in self.sprites:
-            for other_sprite in self.sprites:
-                if sprite is not other_sprite:
-                    sprite.resolve_sprite_collision(other_sprite, 'y')
+        for group in groups:
+            for sprite in group:
+                for other_sprite in self.sprites:
+                    if sprite is not other_sprite:
+                        sprite.resolve_sprite_collision(other_sprite, 'y')
 
-        for sprite in self.sprites:
-            for other_sprite in self.sprites:
-                if sprite is not other_sprite:
-                    sprite.resolve_sprite_collision(other_sprite, 'y')
+        # Now do narrow phase collision
+        for group in groups:
+            for sprite in group:
+                for other_sprite in self.sprites:
+                    if sprite is not other_sprite:
+                        sprite.resolve_sprite_collision(other_sprite, 'x')
 
         # Double check that no one resolved into a wall
         for sprite in self.sprites:
