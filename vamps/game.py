@@ -113,7 +113,7 @@ class SampleScene(AbstractState):
         rdc.recursive_clustering(self.sprites, 0, 1)
         groups = rdc.colliding_groups
 
-        # Now do narrow phase collision
+        # Now do narrow phase collision and resolution
         for group in groups:
             for sprite in group:
                 for other_sprite in self.sprites:
