@@ -10,6 +10,7 @@ from freezegame.sprite import Sprite
 from freezegame.tile_map import TileMap
 from freezegame.broad_phase_collision import RDC
 from vamps.player import Player
+import math
 
 pyglet.resource.path = ["./graphics"]
 pyglet.resource.reindex()
@@ -117,14 +118,11 @@ class SampleScene(AbstractState):
             for sprite in group:
                 for other_sprite in self.sprites:
                     if sprite is not other_sprite:
-                        sprite.resolve_sprite_collision(other_sprite, 'y')
-
-        # Now do narrow phase collision
-        for group in groups:
-            for sprite in group:
-                for other_sprite in self.sprites:
-                    if sprite is not other_sprite:
-                        sprite.resolve_sprite_collision(other_sprite, 'x')
+                        resolution_vector = [sprite.desired_position_sprite_collision(other_sprite, 'x'), sprite.desired_position_sprite_collision(other_sprite, 'y')]
+                        if math.fabs(resolution_vector[0]) < math.fabs(resolution_vector[1]):
+                            sprite.desired_position[0] = sprite.desired_position[0] + resolution_vector[0]
+                        else:
+                            sprite.desired_position[1] = sprite.desired_position[1] + resolution_vector[1]
 
         # Double check that no one resolved into a wall
         for sprite in self.sprites:
