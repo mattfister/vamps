@@ -68,9 +68,9 @@ class Player(Sprite):
             self.play_animation('walkRight')
         elif keys[pyglet.window.key.LEFT] and self.on_ground:
             self.play_animation('walkLeft')
-        elif self.vx >= 0 and self.on_ground:
+        elif self.on_ground and self.vx >= 0 and self.vx < 10:
             self.play_animation('standRight')
-        elif self.vx < 0 and self.on_ground:
+        elif self.on_ground and self.vx <0 and self.vx > -10:
             self.play_animation('standLeft')
         elif (not self.on_ground) and self.vx > 0:
             self.play_animation('jumpRight')
