@@ -1,5 +1,6 @@
 import json
 
+
 class RoomData():
     def __init__(self, path):
         file = open(path)
