@@ -110,7 +110,6 @@ class SampleScene(AbstractState):
         for sprite in self.sprites:
             if sprite.updatable:
                 sprite.resolve_tile_map_collisions(self.map)
-                sprite.finish_resolution()
 
         # Broad phase collision
         rdc = RDC()
