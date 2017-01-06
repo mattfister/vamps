@@ -10,6 +10,7 @@ from freezegame.sprite import Sprite
 from freezegame.tile_map import TileMap
 from freezegame.broad_phase_collision import RDC
 from vamps.player import Player
+import itertools
 import math
 
 pyglet.resource.path = ["./graphics"]
@@ -83,6 +84,8 @@ class SampleScene(AbstractState):
 
         self.player = Player(64, 64, self)
         self.sprites.append(self.player)
+        for i in range(1):
+            self.sprites.append(Player(96+32*i, 64, self))
 
     def draw(self):
         glLoadIdentity()
@@ -107,20 +110,21 @@ class SampleScene(AbstractState):
         for sprite in self.sprites:
             if sprite.updatable:
                 sprite.resolve_tile_map_collisions(self.map)
+                sprite.finish_resolution()
 
         # Broad phase collision
         rdc = RDC()
         rdc.recursive_clustering(self.sprites, 0, 1)
         groups = rdc.colliding_groups
 
-        # Now do narrow phase collision and resolution
+        #Now do narrow phase collision and resolution
         for group in groups:
             for sprite in group:
                 for other_sprite in self.sprites:
                     if sprite is not other_sprite:
                         pass
 
-        # Double check that no one resolved into a wall
+        #Double check that no one resolved into a wall
         for sprite in self.sprites:
             sprite.resolve_tile_map_collisions(self.map)
             sprite.update_sprite_pos()
