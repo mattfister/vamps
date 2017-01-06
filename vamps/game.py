@@ -9,6 +9,7 @@ from freezegame.abstract_state import AbstractState
 from freezegame.sprite import Sprite
 from freezegame.tile_map import TileMap
 from freezegame.broad_phase_collision import RDC
+from vamps.jumper import Jumper
 from vamps.player import Player
 import itertools
 import math
@@ -73,8 +74,8 @@ class SampleScene(AbstractState):
 
         self.player = None
 
-        self.width = 10
-        self.height = 10
+        self.width = 20
+        self.height = 20
 
         self.map = TileMap(32, 32,  self.width, self.height, self, 'tileSet', [0, 192, 32, 32], self.map_group)
         self.map.build_surrounding_walls()
@@ -84,8 +85,8 @@ class SampleScene(AbstractState):
 
         self.player = Player(64, 64, self)
         self.sprites.append(self.player)
-        for i in range(1):
-            self.sprites.append(Player(96+32*i, 64, self))
+        for i in range(15):
+            self.sprites.append(Jumper(96+32*i, 64, self))
 
     def draw(self):
         glLoadIdentity()
@@ -148,7 +149,7 @@ def update(dt):
 def on_draw():
     window.clear()
     level.draw()
-    fps.draw()
+    #fps.draw()
     #pyglet.gl.glFlush()
     #pyglet.gl.glFinish()
 
