@@ -10,9 +10,9 @@ from freezegame.sprite import Sprite
 from freezegame.tile_map import TileMap
 from freezegame.broad_phase_collision import RDC
 from vamps.jumper import Jumper
-from vamps.player import Player
 import itertools
 import math
+from vamps.room import Room
 
 pyglet.resource.path = ["./graphics"]
 pyglet.resource.reindex()
@@ -41,10 +41,10 @@ debug_log.close()
 template = pyglet.gl.Config(double_buffer=True)
 config = screen.get_best_config(template=template)
 
-window = pyglet.window.Window(1024, 768, fullscreen=False, resizable=False, config=config, vsync=False)
+window = pyglet.window.Window(1920, 1080, fullscreen=False, resizable=False, config=config, vsync=False)
 
-icon16 = pyglet.image.load('sample_graphics/pybaconIcon16.png')
-icon32 = pyglet.image.load('sample_graphics/pybaconIcon32.png')
+icon16 = pyglet.image.load('graphics/pybaconIcon16.png')
+icon32 = pyglet.image.load('graphics/pybaconIcon32.png')
 window.set_icon(icon16, icon32)
 
 window.set_caption("Freezegame Sample")
@@ -58,79 +58,8 @@ glShadeModel(GL_SMOOTH)
 
 fps = pyglet.clock.ClockDisplay()
 
-level = AbstractState()
 
-
-class SampleScene(AbstractState):
-    def __init__(self):
-        AbstractState.__init__(self)
-        self.batch = pyglet.graphics.Batch()
-        self.player_group = pyglet.graphics.OrderedGroup(3)
-        self.sprite_group = pyglet.graphics.OrderedGroup(2)
-        self.map_group = pyglet.graphics.OrderedGroup(1)
-        self.background_group = pyglet.graphics.OrderedGroup(0)
-
-        self.sprites = []
-
-        self.player = None
-
-        self.width = 20
-        self.height = 20
-
-        self.map = TileMap(32, 32,  self.width, self.height, self, 'tileSet', [0, 192, 32, 32], self.map_group)
-        self.map.build_surrounding_walls()
-        self.map.auto_tile()
-
-        self.camera = [0, 0]
-
-        self.player = Player(64, 64, self)
-        self.sprites.append(self.player)
-        for i in range(15):
-            self.sprites.append(Jumper(96+32*i, 64, self))
-
-    def draw(self):
-        glLoadIdentity()
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glMatrixMode(GL_MODELVIEW)
-        glPushMatrix()
-        self.batch.draw()
-        glPopMatrix()
-
-    def update(self, dt, keys):
-        if dt > 0.05:
-            return
-
-        for sprite in self.sprites:
-            if sprite.updatable:
-                sprite.update(dt, keys, self)
-
-        # Now we turn off all the sprites
-        for sprite in self.sprites:
-            sprite.on = False
-        for sprite in self.sprites:
-            if sprite.updatable:
-                sprite.resolve_tile_map_collisions(self.map)
-
-        # Broad phase collision
-        rdc = RDC()
-        rdc.recursive_clustering(self.sprites, 0, 1)
-        groups = rdc.colliding_groups
-
-        #Now do narrow phase collision and resolution
-        for group in groups:
-            pairs = list(itertools.combinations(group, 2))
-            for pair in pairs:
-                pair[0].separate(pair[1])
-
-        #Double check that no one resolved into a wall
-        for sprite in self.sprites:
-            sprite.resolve_tile_map_collisions(self.map)
-            sprite.update_sprite_pos()
-
-
-
-level = SampleScene()
+level = Room(0, 0, 60, 32, None, None, None)
 
 
 @window.event
@@ -149,7 +78,7 @@ def update(dt):
 def on_draw():
     window.clear()
     level.draw()
-    #fps.draw()
+    fps.draw()
     #pyglet.gl.glFlush()
     #pyglet.gl.glFinish()
 
