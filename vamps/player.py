@@ -20,9 +20,6 @@ class Player(Sprite):
         self.create_animations()
         self.damage_timer = 0.0
         self.damage_timeout = 0.5
-        self.flash_timer = 0.0
-        self.flash_timeout = 0.1
-        self.flash_on = False
 
     def create_animations(self):
         self.add_animation('standRight', [[0, 32, 32, 32], [32, 32, 32, 32]], fps=5.0)
@@ -78,15 +75,6 @@ class Player(Sprite):
 
         if self.damage_timer > 0.0:
             self.damage_timer -= dt
-            self.flash_timer -= dt
-            if self.flash_timer <= 0:
-                self.flash_timer = self.flash_timeout
-                if self.flash_on:
-                    self.set_color([50, 50, 50])
-                    self.flash_on = False
-                else:
-                    self.set_color([255, 255, 255])
-                    self.flash_on = True
         else:
             self.set_color([255, 255, 255])
 
@@ -122,5 +110,6 @@ class Player(Sprite):
             print('ouch ' + str(damage))
             self.damage_timer = self.damage_timeout
             self.hp -= damage
+            self.flash(0.5)
             if self.hp <= 0:
                 self.dead = True
