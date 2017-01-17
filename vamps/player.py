@@ -78,15 +78,12 @@ class Player(Sprite):
         else:
             self.set_color([255, 255, 255])
 
-
-
         Sprite.update(self, dt, keys, state)
 
     def shoot(self, direction):
         if self.shoot_timer <= 0.0:
             self.shoot_timer = self.shoot_timeout
             self.state.sprites.append(PlayerMissile(self.x, self.y, direction, self.state))
-
 
     def update_animations(self, dt, keys, state):
         if keys[pyglet.window.key.D] and self.on_ground:
@@ -103,7 +100,9 @@ class Player(Sprite):
             self.play_animation('jumpLeft')
 
     def collision_callback(self, other_sprite):
-        pass
+        print(other_sprite)
+        if other_sprite.is_door and other_sprite.is_open:
+            self.state.player_on_open_door = True
 
     def take_damage(self, damage):
         if self.damage_timer <= 0:

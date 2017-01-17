@@ -40,5 +40,5 @@ class PlayerMissile(Sprite):
     def collision_callback(self, other_sprite):
         if other_sprite.is_enemy:
             other_sprite.take_damage(self.damage)
-        if not other_sprite.is_player and not isinstance(other_sprite, PlayerMissile):
+        if other_sprite.physical_to_sprites and not other_sprite.is_player and not isinstance(other_sprite, PlayerMissile):
             self.dead = True
