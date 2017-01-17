@@ -13,6 +13,7 @@ from vamps.jumper import Jumper
 import itertools
 import math
 from vamps.room import Room
+from vamps.state_controller import StateController
 
 pyglet.resource.path = ["./graphics"]
 pyglet.resource.reindex()
@@ -41,7 +42,7 @@ debug_log.close()
 template = pyglet.gl.Config(double_buffer=True)
 config = screen.get_best_config(template=template)
 
-window = pyglet.window.Window(1920, 1080, fullscreen=False, resizable=False, config=config, vsync=False)
+window = pyglet.window.Window(1920, 1080, fullscreen=True, resizable=False, config=config, vsync=False)
 
 icon16 = pyglet.image.load('graphics/pybaconIcon16.png')
 icon32 = pyglet.image.load('graphics/pybaconIcon32.png')
@@ -59,7 +60,7 @@ glShadeModel(GL_SMOOTH)
 fps = pyglet.clock.ClockDisplay()
 
 
-level = Room(0, 0, 60, 32, None, None, None)
+level = StateController()
 
 
 @window.event
