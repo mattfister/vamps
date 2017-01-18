@@ -26,6 +26,7 @@ class Room(AbstractState):
         self.background_group = pyglet.graphics.OrderedGroup(0)
 
         self.sprites = []
+
         self.doors = []
 
         self.player = None

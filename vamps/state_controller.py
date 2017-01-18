@@ -10,7 +10,7 @@ class StateController(AbstractState):
 
     def update(self, dt, keys):
         self.current_state.update(dt, keys)
-        if keys[pyglet.window.key.R]:
+        if self.current_state.player_on_open_door:
             self.current_state = Room(0, 0, 60, 32, None, None, None)
 
     def draw(self):

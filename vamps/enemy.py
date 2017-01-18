@@ -28,7 +28,6 @@ class Enemy(Sprite):
 
     def collision_callback(self, other_sprite):
         if other_sprite.is_player:
-            print(str(self))
             other_sprite.take_damage(self.damage)
 
     def update(self, dt, keys, state):
