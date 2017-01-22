@@ -1,6 +1,4 @@
-from freezegame.sprite import Sprite
-import pyglet
-from vamps.enemy import Enemy
+from vamps.enemies.enemy import Enemy
 
 
 class Roamer(Enemy):
