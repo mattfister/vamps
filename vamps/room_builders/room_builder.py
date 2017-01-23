@@ -1,3 +1,7 @@
+import random
+from vamps.door import Door
+from vamps.enemies.blaster import Blaster
+from vamps.enemies.roamer import Roamer
 from vamps.room import Room
 
 
@@ -9,6 +13,8 @@ class RoomBuilder:
     def build_room(self):
         self.build_structure()
         self.auto_tile()
+        print(self.room.enemy_spots)
+        random.shuffle(self.room.enemy_spots)
         self.place_enemies()
         self.place_doors()
         self.place_player()
@@ -21,10 +27,21 @@ class RoomBuilder:
         self.room.wall_map.auto_tile()
 
     def place_enemies(self):
-        pass
+        enemies_to_place = 5
+        while enemies_to_place > 0:
+            spot = self.room.enemy_spots.pop(0)
+            if random.random() < 0.5:
+                self.room.sprites.append(Blaster(spot[0]*32, spot[1]*32, random.choice(['left', 'right']), self.room))
+            else:
+                self.room.sprites.append(Roamer(spot[0]*32, spot[1]*32, random.choice(['left', 'right']), self.room))
+            enemies_to_place -= 1
 
     def place_doors(self):
-        pass
+        spot = random.choice(self.room.door_spots)
+        door = Door(spot[0]*32, spot[1]*32, self.room)
+        self.room.sprites.append(door)
+        self.room.doors.append(door)
+
 
     def place_player(self):
         pass

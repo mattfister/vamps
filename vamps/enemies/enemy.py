@@ -1,5 +1,6 @@
 from freezegame.sprite import Sprite
 import pyglet
+from vamps.enemy_missile import EnemyMissile
 
 
 class Enemy(Sprite):
@@ -37,3 +38,6 @@ class Enemy(Sprite):
                 self.set_color([255, 255, 255])
                 self.showing_damage = False
         Sprite.update(self, dt, keys, state)
+
+    def shoot(self, direction):
+        self.state.sprites.append(EnemyMissile(self.x, self.y, direction, self.state))

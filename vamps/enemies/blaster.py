@@ -1,11 +1,13 @@
 from vamps.enemies.enemy import Enemy
 
 
-class Roamer(Enemy):
+class Blaster(Enemy):
     def __init__(self, x, y, facing, state):
         Enemy.__init__(self, x, y, facing, 3, [0, 0, 32, 32], state, 'sprites', [1*32, 3*32, 32, 32], state.batch, state.enemy_group)
         self.create_animations()
         self.facing = facing
+        self.shoot_timeout = 2.0
+        self.shoot_timer = self.shoot_timeout
         self.damage = 1
 
     def create_animations(self):
@@ -16,14 +18,11 @@ class Roamer(Enemy):
         acc = 1000.0
         jump = 300.0
 
-        if self.facing == "left":
-            self.vx = -200
-            if self.collide_left and self.on_ground:
-                self.facing = "right"
-        else:
-            self.vx = 200
-            if self.collide_right and self.on_ground:
-                self.facing = "left"
+        self.shoot_timer -= dt
+
+        if self.shoot_timer <= 0.0:
+            self.shoot_timer = self.shoot_timeout
+            self.shoot(self.facing)
 
         Enemy.update(self, dt, keys, state)
 

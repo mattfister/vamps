@@ -17,26 +17,26 @@ class Room(AbstractState):
         self.height = height
 
         self.batch = pyglet.graphics.Batch()
-        self.player_group = pyglet.graphics.OrderedGroup(3)
-        self.sprite_group = pyglet.graphics.OrderedGroup(2)
+        self.player_group = pyglet.graphics.OrderedGroup(5)
+        self.player_missile_group = pyglet.graphics.OrderedGroup(4)
+        self.enemy_missile_group = pyglet.graphics.OrderedGroup(3)
+        self.enemy_group = pyglet.graphics.OrderedGroup(2)
         self.wall_map_group = pyglet.graphics.OrderedGroup(1)
         self.background_group = pyglet.graphics.OrderedGroup(0)
 
         self.sprites = []
-
         self.doors = []
+        self.enemy_spots = []
+        self.door_spots = []
 
         self.player = None
         self.player_on_open_door = False
 
-        self.wall_map = TileMap(32, 32,  self.width, self.height, self, 'tileSet', [0, 192, 32, 32], self.wall_map_group)
+        self.wall_map = TileMap(32, 32, self.width, self.height, self, 'tileSet', [0, 192, 32, 32], self.wall_map_group)
 
         self.start_timer = 1.0
 
-
         self.camera = [0, 0]
-
-
 
     def remove_dead_sprites(self):
         new_sprites = []
@@ -80,19 +80,19 @@ class Room(AbstractState):
         rdc.recursive_clustering(self.sprites, 0, 1)
         groups = rdc.colliding_groups
 
-        #Now do narrow phase collision and resolution
+        # Now do narrow phase collision and resolution
         for group in groups:
             pairs = list(itertools.combinations(group, 2))
             for pair in pairs:
                 pair[0].separate(pair[1])
 
-        #Double check that no one resolved into a wall
+        # Double check that no one resolved into a wall
         for sprite in self.sprites:
             sprite.resolve_tile_map_collisions(self.wall_map)
             if sprite.y + sprite.box[0] < 0:
-                sprite.y = self.height*32
+                sprite.y = self.height * 32
             if sprite.x + sprite.box[0] < 0:
-                sprite.x = self.width*32 - sprite.box[0] - sprite.box[2]
+                sprite.x = self.width * 32 - sprite.box[0] - sprite.box[2]
             if sprite.x + sprite.box[0] + sprite.box[2] > self.width * 32:
                 sprite.x = 0
             sprite.update_sprite_pos()
@@ -108,6 +108,3 @@ class Room(AbstractState):
         if not any_enemies_left:
             for door in self.doors:
                 door.open()
-
-
-
