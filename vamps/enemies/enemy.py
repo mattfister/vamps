@@ -1,5 +1,7 @@
 from freezegame.sprite import Sprite
 import pyglet
+
+from freezegame import vector_math
 from vamps.enemy_missile import EnemyMissile
 
 
@@ -41,3 +43,15 @@ class Enemy(Sprite):
 
     def shoot(self, direction):
         self.state.sprites.append(EnemyMissile(self.x, self.y, direction, self.state))
+
+    def vector_to_player(self):
+        if self.state.player is None:
+            return [0, 0]
+        else:
+            return vector_math.vector_object_object(self, self.state.player)
+
+    def norm_vector_to_player(self):
+        if self.state.player is None:
+            return [0, 0]
+        else:
+            return vector_math.norm(vector_math.vector_object_object(self, self.state.player))

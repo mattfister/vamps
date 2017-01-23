@@ -1,7 +1,9 @@
 import random
 from vamps.door import Door
 from vamps.enemies.blaster import Blaster
+from vamps.enemies.eagle import Eagle
 from vamps.enemies.roamer import Roamer
+from vamps.enemies.seeker import Seeker
 from vamps.room import Room
 
 
@@ -30,10 +32,8 @@ class RoomBuilder:
         enemies_to_place = 5
         while enemies_to_place > 0:
             spot = self.room.enemy_spots.pop(0)
-            if random.random() < 0.5:
-                self.room.sprites.append(Blaster(spot[0]*32, spot[1]*32, random.choice(['left', 'right']), self.room))
-            else:
-                self.room.sprites.append(Roamer(spot[0]*32, spot[1]*32, random.choice(['left', 'right']), self.room))
+            enemy_class = random.choice(self.get_enemy_classes())
+            self.room.sprites.append(enemy_class(spot[0]*32, spot[1]*32, random.choice(['left', 'right']), self.room))
             enemies_to_place -= 1
 
     def place_doors(self):
@@ -45,3 +45,6 @@ class RoomBuilder:
 
     def place_player(self):
         pass
+
+    def get_enemy_classes(self):
+        return [Blaster, Roamer, Eagle, Seeker]

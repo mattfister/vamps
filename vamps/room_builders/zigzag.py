@@ -1,7 +1,9 @@
 import random
 
-from vamps.door import Door
 from vamps.enemies.blaster import Blaster
+from vamps.enemies.eagle import Eagle
+from vamps.enemies.seeker import Seeker
+from vamps.enemies.sniper import Sniper
 from vamps.player import Player
 from vamps.enemies.roamer import Roamer
 from vamps.room_builders.room_builder import RoomBuilder
@@ -31,3 +33,7 @@ class ZigZag(RoomBuilder):
     def place_player(self):
         self.room.player = Player(64, 64, self.room)
         self.room.sprites.append(self.room.player)
+
+    def get_enemy_classes(self):
+        return [Sniper]
+        #return [Blaster, Roamer, Seeker, Sniper]

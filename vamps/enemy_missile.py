@@ -1,6 +1,7 @@
 from freezegame.sprite import Sprite
 import pyglet
 from freezegame.tile import Tile
+from freezegame.vector_math import norm, vector_object_object
 
 
 class EnemyMissile(Sprite):
@@ -28,6 +29,14 @@ class EnemyMissile(Sprite):
             self.vy = self.speed
         elif self.direction == 'down':
             self.vy = -self.speed
+        elif self.direction == 'player':
+            if self.state.player is None:
+                self.vx = 1
+                self.vy = 0
+            else:
+                unit_vector_to_player = norm(vector_object_object(self, self.state.player))
+                self.vx = unit_vector_to_player[0] * self.speed
+                self.vy = unit_vector_to_player[1] * self.speed
 
     def create_animations(self):
         self.add_animation('idle', [[5*32, 3*32, 32, 32], [6*32, 3*32, 32, 32]], fps=10.0)
