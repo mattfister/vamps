@@ -15,7 +15,6 @@ class RoomBuilder:
     def build_room(self):
         self.build_structure()
         self.auto_tile()
-        print(self.room.enemy_spots)
         random.shuffle(self.room.enemy_spots)
         self.place_enemies()
         self.place_doors()

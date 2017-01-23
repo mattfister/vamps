@@ -100,13 +100,11 @@ class Player(Sprite):
             self.play_animation('jumpLeft')
 
     def collision_callback(self, other_sprite):
-        print(other_sprite)
         if other_sprite.is_door and other_sprite.is_open:
             self.state.player_on_open_door = True
 
     def take_damage(self, damage):
         if self.damage_timer <= 0:
-            print('ouch ' + str(damage))
             self.damage_timer = self.damage_timeout
             self.hp -= damage
             self.flash(0.5)
