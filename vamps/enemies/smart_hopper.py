@@ -1,20 +1,25 @@
+from freezegame.sprite import Sprite
+import pyglet
+
 from vamps.enemies.enemy import Enemy
 
 
-class Seeker(Enemy):
+class Hopper(Enemy):
     def __init__(self, x, y, facing, state):
         Enemy.__init__(self, x, y, facing, 3, [0, 0, 32, 32], state, 'sprites', [1*32, 3*32, 32, 32], state.batch, state.enemy_group)
-        self.create_animations()
+        self.start_jump = False;
+        self.jump_timeout = 0.2
+        self.jump_timer = 0.0
         self.facing = facing
         self.damage = 1
         self.dead_zone = 32
+        self.create_animations()
 
     def create_animations(self):
-        self.add_animation('walkRight', [[1*32, 3*32, 32, 32], [2*32, 3*32, 32, 32]], fps=10.0)
-        self.add_animation('walkLeft', [[1*32, 4*32, 32, 32], [2*32, 4*32, 32, 32]], fps=10.0)
+        self.add_animation('walkRight', [[1 * 32, 3 * 32, 32, 32], [2 * 32, 3 * 32, 32, 32]], fps=10.0)
+        self.add_animation('walkLeft', [[1 * 32, 4 * 32, 32, 32], [2 * 32, 4 * 32, 32, 32]], fps=10.0)
 
     def update(self, dt, keys, state):
-        acc = 1000.0
         jump = 300.0
 
         vector_to_player = self.vector_to_player()
@@ -28,6 +33,10 @@ class Seeker(Enemy):
         else:
             self.vx = 200
 
+        self.jump_timer -= dt
+        if self.on_ground and self.jump_timer <= 0:
+            self.vy = jump
+            self.jump_timer = self.jump_timeout
 
         Enemy.update(self, dt, keys, state)
 
@@ -36,3 +45,4 @@ class Seeker(Enemy):
             self.play_animation('walkRight')
         elif self.facing == 'left':
             self.play_animation('walkLeft')
+

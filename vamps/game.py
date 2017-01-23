@@ -1,18 +1,8 @@
-import pyglet
 from pyglet.gl import *
 
-from freezegame.image_loader import *
-
 import freezegame.resources
+from freezegame.image_loader import *
 from freezegame.image_loader import ImageLoader
-from freezegame.abstract_state import AbstractState
-from freezegame.sprite import Sprite
-from freezegame.tile_map import TileMap
-from freezegame.broad_phase_collision import RDC
-from vamps.jumper import Jumper
-import itertools
-import math
-from vamps.room import Room
 from vamps.state_controller import StateController
 
 pyglet.resource.path = ["./graphics"]
