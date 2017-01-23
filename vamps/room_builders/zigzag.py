@@ -35,5 +35,4 @@ class ZigZag(RoomBuilder):
         self.room.sprites.append(self.room.player)
 
     def get_enemy_classes(self):
-        return [Sniper]
-        #return [Blaster, Roamer, Seeker, Sniper]
+        return [Blaster, Roamer, Seeker, Sniper]
