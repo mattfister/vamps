@@ -26,8 +26,10 @@ class Room(AbstractState):
 
         self.sprites = []
         self.doors = []
-        self.enemy_spots = []
+        self.ground_enemy_spots = []
+        self.air_enemy_spots = []
         self.door_spots = []
+        self.player_spots = []
 
         self.player = None
         self.player_on_open_door = False

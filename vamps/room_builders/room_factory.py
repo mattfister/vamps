@@ -1,8 +1,11 @@
-from vamps.room import Room
-from vamps.room_builders.room_builder import RoomBuilder
+import random
+from vamps.room_builders.pit import Pit
+from vamps.room_builders.twister import Twister
 from vamps.room_builders.zigzag import ZigZag
 
 
 def build_room(level):
-    room_builder = ZigZag(level)
+    rooms = [ZigZag, Pit, Twister]
+    room = random.choice(rooms)
+    room_builder = room(level)
     return room_builder.build_room()
