@@ -31,7 +31,7 @@ class Player(Sprite):
 
     def update(self, dt, keys, state):
         acc = 1000.0
-        jump = 300.0
+        jump = 400.0
 
         self.jump_timer -= dt
         if self.jump_timer <= 0.0:
