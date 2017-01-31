@@ -21,6 +21,9 @@ class Player(Sprite):
         self.damage_timer = 0.0
         self.damage_timeout = 0.5
 
+    def copy_player_attributes(self, old_player):
+        self.hp = old_player.hp
+
     def create_animations(self):
         self.add_animation('standRight', [[0, 32, 32, 32], [32, 32, 32, 32]], fps=5.0)
         self.add_animation('standLeft', [[0, 64, 32, 32], [32, 64, 32, 32]], fps=5.0)

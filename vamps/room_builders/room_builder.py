@@ -17,14 +17,14 @@ class RoomBuilder:
         self.level = level
         self.room = Room(0, 0, 60, 32, None, None, None)
 
-    def build_room(self):
+    def build_room(self, old_player):
         self.build_structure()
         self.auto_tile()
         random.shuffle(self.room.ground_enemy_spots)
         random.shuffle(self.room.air_enemy_spots)
         self.place_enemies()
         self.place_doors()
-        self.place_player()
+        self.place_player(old_player)
         return self.room
 
     def build_structure(self):
@@ -62,9 +62,11 @@ class RoomBuilder:
         self.room.sprites.append(door)
         self.room.doors.append(door)
 
-    def place_player(self):
+    def place_player(self, old_player):
         spot = random.choice(self.room.player_spots)
-        self.room.player = Player(spot[0]*32, spot[1]*32 , self.room)
+        self.room.player = Player(spot[0]*32, spot[1]*32, self.room)
+        if old_player is not None:
+            self.room.player.copy_player_attributes(old_player)
         self.room.sprites.append(self.room.player)
 
     def get_ground_enemy_classes(self):
