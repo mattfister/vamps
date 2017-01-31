@@ -44,7 +44,7 @@ class RoomBuilder:
             num_air_enemy_types = total_enemy_types
         air_enemies = random.sample(self.get_air_enemy_classes(), num_air_enemy_types)
         ground_enemies = random.sample(self.get_ground_enemy_classes(), num_ground_enemy_types)
-        enemies_to_place = 5
+        enemies_to_place = 5 + self.level * 2
         while enemies_to_place > 0:
             place_air_enemy = random.randint(0, total_enemy_types-1) < num_air_enemy_types
             if place_air_enemy:
